@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content=" Web portfolio of Miguel Ángel Roldán de Haro">
+    <meta name="author" content="Devcrud">
+    <title>Portfolio MA</title>
+    <!-- font icons -->
+    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
+    <!-- Bootstrap + main styles -->
+	<link rel="stylesheet" href="assets/css/styles.css">
+
+    <!-- Servicio de correos -->
+    <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript">
+        emailjs.init('wLmX41s71XI_s3Iz9')
+      </script>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="#">Portfolio MA</a>         
+            <ul class="nav">
+                <li class="item">
+                    <a class="link" href="#home">Home</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#about">About</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#portfolio">Portfolio</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#testmonial">Testmonial</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#blog">Blog</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#contact">Contact</a>
+                </li>
+            </ul>
+            <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic">
+                <div class="hamburger-box">
+                  <div class="hamburger-inner"></div>
+                </div>
+            </a>
+        </div>          
+    </nav><!-- End of Page Navbar -->
+
+    <!-- page header -->
+    <header id="home" class="header">
+        <div class="overlay"></div>
+        <div class="header-content container">
+            <h1 class="header-title">
+                <span class="up">HI!</span>
+                <span class="down">I am Miguel Ángel Roldán de Haro</span>
+            </h1>
+            <p class="header-subtitle">Cross-platform application developer and pentester</p>            
+
+            <button class="btn btn-primary" onclick="scrollToSection('portfolio')">Visit My Works</button>
+        </div>              
+    </header><!-- end of page header -->
+
+    <!-- about section -->
+    <section class="section pt-0" id="about">
+        <!-- container -->
+        <div class="container text-center">
+            <!-- about wrapper -->
+            <div class="about">
+                <div class="about-img-holder">
+                    <img src="assets/imgs/fotoPortada.png" class="about-img" alt="">
+                </div>
+                <div class="about-caption">
+                    <p class="section-subtitle">Who Am I ?</p>
+                    <h2 class="section-title mb-3">About Me</h2>
+                    <p>
+                        I am a person passionate and committed to my work. My ability to work as a team and solve problems 
+                        allows me to easily adapt to any work environment. Additionally, as a cybersecurity and ethical 
+                        hacking enthusiast, I constantly strive to develop my skills and stay up to date with the latest 
+                        technologies and trends. I am always looking for ways to improve and add value to the company, 
+                        and I am excited to work as a team to find innovative solutions to security challenges. <br><br>
+
+                        For the last few years, I have been working on a pentesting tool called Ciber Monkey, which 
+                        performs tasks such as port scanning, file encryption, SQL injections, DNS attacks, among others.
+                        If you want to know more, feel free to check out my LinkedIn profile <a href="https://www.linkedin.com/in/mardh">LinkedIn profile</a>
+                        where I have posted more details about this project.
+                    </p>
+                    <button onclick="openPDF()"class="btn-rounded btn btn-outline-primary mt-4">Download CV</button>
+                </div>              
+            </div><!-- end of about wrapper -->
+        </div><!-- end of container -->
+    </section> <!-- end of about section -->
+
+    <!-- service section -->
+    <section class="section" id="service">
+        <div class="container text-center">
+            <p class="section-subtitle">What I Do ?</p>
+            <h6 class="section-title mb-6">Service</h6>
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/responsive.svg" alt="" class="icon">
+                            <h6 class="title">APPs development</h6>
+                            <p class="subtitle">Creating Android applications using Android Studio. For users and companies.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/forense.png" alt="" class="icon">
+                            <h6 class="title">Digital forensics</h6>
+                            <p class="subtitle">Forensic computing on computers and mobile phones in search of evidence.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/pentester.png" alt="" class="icon">
+                            <h6 class="title">Pentesting</h6>
+                            <p class="subtitle">Ethical hacking on websites and apps in search of vulnerabilities to resolve them.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="body">
+                            <img src="assets/imgs/consultor.png" alt="" class="icon">
+                            <h6 class="title">Cybersecurity consultant</h6>
+                            <p class="subtitle">Identify and evaluate vulnerabilities. Implementing security strategies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end of row -->
+        </div>
+    </section><!-- end of service section -->
+
+    <!-- portfolio section -->
+    <section class="section" id="portfolio">
+        <div class="container text-center">
+            <p class="section-subtitle">What I Did ?</p>
+            <h6 class="section-title mb-6">Portfolio</h6>
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="#" class="portfolio-card">
+                        <img src="assets/imgs/cibersecurity.png" class="portfolio-card-img" alt="Ciber Monkey">    
+                        <span class="portfolio-card-overlay">
+                            <span class="portfolio-card-caption">
+                                <h4>Ciber Monkey</h5>
+                                <p class="font-weight-normal">Ciber Monkey, which 
+                                    performs tasks such as port scanning, file encryption, SQL injections, DNS attacks, among others.</p>
+                            </span>                         
+                        </span>                     
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" class="portfolio-card">
+                        <img class="portfolio-card-img" src="assets/imgs/tpot.png" class="img-responsive rounded" alt="T-Pot">
+                        <span class="portfolio-card-overlay">
+                            <span class="portfolio-card-caption">
+                                <h4>Honeypot with T-Pot</h5>
+                                <p class="font-weight-normal">I created a honey pot inside my local network and brute force it using SSH and a DDoS attack</p>
+                            </span>                         
+                        </span>                         
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" class="portfolio-card">
+                        <img class="portfolio-card-img" src="assets/imgs/parrotos.png" class="img-responsive rounded" alt="Parrot OS">    
+                        <span class="portfolio-card-overlay">
+                            <span class="portfolio-card-caption">
+                                <h4>Parrot OS book</h5>
+                                <p class="font-weight-normal">I wrote a 95-page book that contains the most relevant commands of all the Parrot OS tools, such as SQLMap, NMap and many more</p>
+                            </span>                         
+                        </span>                     
+                    </a>
+                </div>
+            </div><!-- end of row -->
+        </div><!-- end of container -->
+    </section> <!-- end of portfolio section -->
+
+    <!-- section -->
+    <section class="section-sm bg-primary">
+        <!-- container -->
+        <div class="container text-center text-sm-left">
+            <!-- row -->
+            <div class="row align-items-center">
+                <div class="col-sm offset-md-1 mb-4 mb-md-0">
+                    <h6 class="title text-light">Want to work with me?</h6>
+                    <p class="m-0 text-light">Always feel Free to Contact & Hire me</p>
+                </div>
+                <div class="col-sm offset-sm-2 offset-md-3">
+                    <button onclick="openLinkedIn()" class="btn btn-lg my-font btn-light rounded">Hire Me</button>
+                </div>
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </section> <!-- end of section -->
+
+    <!-- testimonial section -->
+    <section class="section" id="testmonial">
+        <div class="container text-center">
+            <p class="section-subtitle">What do my bosses think about me?</p>
+            <h6 class="section-title mb-6">Testmonial</h6>
+
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-img-holder">
+                            <img src="assets/imgs/user.png" class="testimonial-card-img" alt="">                           
+                        </div>
+                        <div class="testimonial-card-body">
+                            <p class="testimonial-card-subtitle">Miguel Ángel demonstrates exceptional dedication and effort in each project. His commitment to excellence and ability to exceed expectations make him an invaluable member of any team.</p>
+                            <h6 class="testimonial-card-title">Oscar Anguíta Jimenez</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-img-holder">
+                            <img src="assets/imgs/user.png" class="testimonial-card-img" alt="">                        
+                        </div>
+                        <div class="testimonial-card-body">
+                            <p class="testimonial-card-subtitle">Miguel Ángel's work is always of high quality, thanks to his tireless dedication and effort. His positive attitude and work ethic are inspiring to everyone.</p>
+                            <h6 class="testimonial-card-title">Jose Miguel García Jimenez</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end of container -->
+    </section> <!-- end of testimonial section -->
+    
+    <!-- blog section -->
+    <section class="section" id="blog">
+        <!-- container -->
+        <div class="container text-center">
+            <p class="section-subtitle">Recent Posts?</p>
+            <h6 class="section-title mb-6">Blog</h6>
+            <!-- blog-wrapper -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <img src="assets/imgs/ens.png" class="blog-card-img" alt="">
+                </div>
+                <div class="blog-card-body">
+                    <h5 class="blog-card-title">Securing the Digital Future: The National Security Scheme in Spain</h6>
+
+                    <p class="blog-card-caption">
+                        <a href="#">By: MA. Roldán de Haro</a>
+                    </p>
+                    <p>The National Security Scheme (ENS) of Spain is a regulatory framework established to guarantee the protection of information managed by public administrations and their suppliers. Its main objective is to ensure the confidentiality, integrity, availability, authenticity and traceability of data. Implemented by Royal Decree 3/2010 and updated by Royal Decree 951/2015, the ENS establishes minimum security measures and controls. It requires organizations to conduct ongoing risk management and take a proactive approach to threats. Adaptation to the ENS is mandatory for all public sector entities and is considered essential for cybersecurity in the government sphere in Spain. Complying with the ENS improves resilience and confidence in the State's digital services.</p>
+                </div>
+            </div><!-- end of blog wrapper -->
+
+            <!-- blog-wrapper -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <img src="assets/imgs/flipper.jpg" class="blog-card-img" alt="">
+                </div>
+                <div class="blog-card-body">
+                    <h5 class="blog-card-title">Flipper Zero: The Multi-Tool Gadget for Ethical Hackers</h6>
+
+                    <p class="blog-card-caption">
+                        <a href="#">By: MA. Roldán de Haro</a>
+                    </p>
+                    
+                    <p>The Flipper Zero is a multifunctional device designed for security research and ethical hacking. Equipped with multiple interfaces, it allows you to interact with a variety of devices and systems, including RFID, NFC, infrared and radio frequency. Compact and easy to transport, it has become a popular tool among cybersecurity enthusiasts and professionals in the sector. With the Flipper Zero, you can clone access cards, analyze radio signals, and perform penetration tests on wireless networks. Its intuitive interface and open source encourage experimentation and customization, allowing users to expand its capabilities according to their needs. In short, Flipper Zero is a powerful tool that promotes computer security and understanding of the technologies around us.</p>
+
+                </div>
+            </div><!-- end of blog wrapper -->
+
+        </div><!-- end of container -->
+    </section><!-- end of blog section -->
+
+ <!-- contact section -->
+<section class="section" id="contact">
+    <div class="container text-center">
+        <p class="section-subtitle">How can you communicate?</p>
+        <h6 class="section-title mb-5">Contact Me</h6>
+        <!-- contact form -->
+        <form id="contact-form" class="contact-form col-md-10 col-lg-8 m-auto">
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label for="to_name">To Name</label>
+                    <input type="text" name="to_name" id="to_name" class="form-control" value="mayky23dh@gmail.com" placeholder="Enter Recipient's Name" required>
+                </div>                
+                <div class="form-group col-sm-6">
+                    <label for="from_name">From Name</label>
+                    <input type="text" name="from_name" id="from_name" class="form-control" placeholder="Enter Your Name" required>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your Email" required>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label for="message">Message</label>
+                    <textarea name="message" id="message" rows="9" class="form-control" placeholder="Write Something" required></textarea>
+                </div>
+                <div class="form-group col-sm-12 mt-3">
+                    <input type="submit" id="button" value="Send Email" class="btn btn-outline-primary rounded">
+                </div>
+            </div>
+        </form><!-- end of contact form -->
+    </div><!-- end of container -->
+</section><!-- end of contact section -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+    emailjs.init('wLmX41s71XI_s3Iz9');
+</script>
+
+
+
+    <!-- footer -->
+    <div class="container">
+        <footer class="footer">       
+            <p class="mb-0">Copyright <script>document.write(new Date().getFullYear())</script> &copy;Miguel Ángel Roldán de Haro</a></p>
+        </footer>
+    </div> <!-- end of page footer -->
+	
+	<!-- core  -->
+    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+
+    <!-- bootstrap 3 affix -->
+	<script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+
+    <!-- js -->
+    <script src="assets/js/index.js"></script>
+
+</body>
+</html>
