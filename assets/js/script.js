@@ -157,3 +157,47 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+// 1) Inicializa EmailJS con tu User ID
+emailjs.init('wLmX41s71XI_s3Iz9');
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 2) Selecciona form, inputs y botón mediante tus data-attributes
+  const form   = document.querySelector('[data-form]');
+  const inputs = document.querySelectorAll('[data-form-input]');
+  const btn    = document.querySelector('[data-form-btn]');
+
+  // 3) Habilita el botón cuando TODOS los campos estén llenos
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      const allFilled = Array.from(inputs)
+                             .every(i => i.value.trim() !== '');
+      btn.disabled = !allFilled;
+    });
+  });
+
+  // 4) Envío del formulario
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Feedback visual
+    btn.disabled = true;
+    btn.innerHTML = '<ion-icon name="paper-plane"></ion-icon> Enviando...';
+
+    const serviceID  = 'service_ew8tegd';
+    const templateID = 'template_czltfmj';
+
+    emailjs.sendForm(serviceID, templateID, this)
+      .then(() => {
+        alert('¡Mensaje enviado con éxito!');
+        form.reset();
+        btn.innerHTML = '<ion-icon name="paper-plane"></ion-icon> Send Message';
+        btn.disabled = true;
+      }, (err) => {
+        console.error('EmailJS error:', err);
+        alert('Error al enviar: ' + JSON.stringify(err));
+        btn.innerHTML = '<ion-icon name="paper-plane"></ion-icon> Send Message';
+        btn.disabled = false;
+      });
+  });
+});
