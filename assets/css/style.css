@@ -137,6 +137,10 @@ input, textarea {
   font: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 ::selection {
   background: var(--orange-yellow-crayola);
   color: var(--smoky-black);
@@ -145,6 +149,8 @@ input, textarea {
 :focus { outline-color: var(--orange-yellow-crayola); }
 
 html { font-family: var(--ff-poppins); }
+
+html { scroll-behavior: smooth; }
 
 body { background: var(--smoky-black); }
 
@@ -295,6 +301,7 @@ main {
   margin: 15px 12px;
   margin-bottom: 75px;
   min-width: 259px;
+  width: min(100%, 1440px);
 }
 
 
@@ -340,7 +347,8 @@ main {
   background: var(--onyx);
   font-size: var(--fs-8);
   font-weight: var(--fw-300);
-  width: max-content;
+  width: fit-content;
+  max-width: 100%;
   padding: 3px 12px;
   border-radius: 8px;
 }
@@ -464,12 +472,13 @@ main {
   justify-content: center;
   align-items: center;
   padding: 0 10px;
+  gap: 4px;
 }
 
 .navbar-link {
   color: var(--light-gray);
   font-size: var(--fs-8);
-  padding: 20px 7px;
+  padding: 16px 8px;
   transition: color var(--transition-1);
 }
 
@@ -944,6 +953,12 @@ main {
 
 .project-item > a { width: 100%; }
 
+.project-item > a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .project-img {
   position: relative;
   width: 100%;
@@ -1000,8 +1015,13 @@ main {
 
 .project-item > a:hover img { transform: scale(1.1); }
 
-.project-title,
-.project-category { margin-left: 10px; }
+.project-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 132px;
+  padding: 0 10px;
+}
 
 .project-title {
   color: var(--white-2);
@@ -1015,6 +1035,13 @@ main {
   color: var(--light-gray-70);
   font-size: var(--fs-6);
   font-weight: var(--fw-300);
+}
+
+.project-description {
+  color: var(--light-gray);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-300);
+  line-height: 1.6;
 }
 
 
@@ -1136,11 +1163,15 @@ main {
 
 .form-title { margin-bottom: 20px; }
 
+.form {
+  display: grid;
+  gap: 20px;
+}
+
 .input-wrapper {
   display: grid;
   grid-template-columns: 1fr;
   gap: 25px;
-  margin-bottom: 25px;
 }
 
 .form-input {
@@ -1162,7 +1193,6 @@ textarea.form-input {
   height: 120px;
   max-height: 200px;
   resize: vertical;
-  margin-bottom: 25px;
 }
 
 textarea.form-input::-webkit-resizer { display: none; }
@@ -1199,6 +1229,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 .form-btn ion-icon { font-size: 16px; }
 
+.form-btn.is-loading {
+  pointer-events: none;
+}
+
 .form-btn:hover { background: var(--bg-gradient-yellow-1); }
 
 .form-btn:hover::before { background: var(--bg-gradient-yellow-2); }
@@ -1211,6 +1245,49 @@ textarea.form-input::-webkit-resizer { display: none; }
 .form-btn:disabled:hover { background: var(--border-gradient-onyx); }
 
 .form-btn:disabled:hover::before { background: var(--bg-gradient-jet); }
+
+.form-status {
+  display: none;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--jet);
+  background: var(--bg-gradient-jet);
+  color: var(--white-2);
+  line-height: 1.6;
+  box-shadow: var(--shadow-2);
+}
+
+.form-status::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 8px;
+  background: var(--light-gray-70);
+}
+
+.form-status.is-visible {
+  display: flex;
+}
+
+.form-status[data-state="success"] {
+  border-color: hsla(130, 55%, 45%, 0.35);
+}
+
+.form-status[data-state="success"]::before {
+  background: hsl(130, 55%, 55%);
+}
+
+.form-status[data-state="error"] {
+  border-color: hsla(0, 65%, 55%, 0.35);
+}
+
+.form-status[data-state="error"]::before {
+  background: hsl(0, 65%, 60%);
+}
 
 
 
@@ -1280,7 +1357,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    */
 
   .sidebar, article {
-    width: 520px;
+    width: min(100%, 520px);
     margin-inline: auto;
     padding: 30px;
   }
@@ -1514,14 +1591,9 @@ textarea.form-input::-webkit-resizer { display: none; }
     border-radius: 18px;
   }
 
-  .input-wrapper {
-    gap: 30px;
-    margin-bottom: 30px;
-  }
+  .input-wrapper { gap: 30px; }
 
   .form-input { padding: 15px 20px; }
-
-  textarea.form-input { margin-bottom: 30px; }
 
   .form-btn {
     --fs-6: 16px;
@@ -1546,7 +1618,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    * REUSED STYLE
    */
 
-  .sidebar, article { width: 700px; }
+  .sidebar, article { width: min(100%, 700px); }
 
   .has-scrollbar::-webkit-scrollbar-button { width: 100px; }
 
@@ -1615,7 +1687,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   /* portfolio and blog grid */
 
-  .project-list, .blog-posts-list { grid-template-columns: 1fr 1fr; }
+  .project-list, .blog-posts-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 
 
@@ -1665,7 +1737,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    */
 
   .sidebar, article {
-    width: 950px;
+    width: min(100%, 950px);
     box-shadow: var(--shadow-5);
   }
 
@@ -1679,7 +1751,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .main-content {
     position: relative;
-    width: max-content;
+    width: 100%;
     margin: auto;
   }
 
@@ -1735,7 +1807,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    * PORTFOLIO
    */
 
-  .project-list { grid-template-columns: repeat(3, 1fr); }
+  .project-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 
 
@@ -1794,17 +1866,17 @@ textarea.form-input::-webkit-resizer { display: none; }
    */
 
   main {
-    max-width: 1200px;
+    max-width: 1280px;
     margin-inline: auto;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
     align-items: stretch;
     gap: 25px;
   }
 
   .main-content {
-    min-width: 75%;
-    width: 75%;
+    min-width: 0;
+    width: 100%;
     margin: 0;
   }
 
@@ -1818,7 +1890,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     position: sticky;
     top: 60px;
     max-height: max-content;
-    height: 100%;
+    height: fit-content;
     margin-bottom: 0;
     padding-top: 60px;
     z-index: 1;
@@ -1829,7 +1901,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   .avatar-box img { width: 150px; }
 
   .info-content .name {
-    white-space: nowrap;
+    white-space: normal;
     text-align: center;
   }
 

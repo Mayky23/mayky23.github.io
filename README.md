@@ -1,111 +1,86 @@
 # MARH Portfolio
 
-Personal portfolio of **Miguel Ángel Roldán de Haro**, focused on **cybersecurity** and **multiplatform application development**.
+Personal portfolio of **Miguel Ángel Roldán de Haro**, focused on **cybersecurity**, **digital forensics**, **system hardening**, and **application development**.
 
-This website serves as a professional showcase, presenting my profile, experience, education, technical skills, projects, publications, and contact information.
+This site works as a professional showcase for my profile, experience, technical skills, projects, publications, and contact information.
 
 🌐 **Live website:**  
 https://mayky23.github.io
 
-## About Me
+## Overview
 
-I am a professional currently training and specializing in **cybersecurity**, with experience in:
+The portfolio is built as a single-page website with dedicated sections for:
 
-- secure Linux and Windows systems administration
-- digital forensics
-- ethical hacking and pentesting
-- incident monitoring and investigation
-- secure development
-- automation and application development
+- About
+- Resume
+- Portfolio
+- Blog
+- Contact
 
-I also have a solid foundation in technologies such as:
+It is designed to be fully responsive across mobile phones, tablets, laptops, and desktop screens.
 
-- Python
-- Java
-- SQL
-- HTML
-- CSS
-- JavaScript
+## Main Focus Areas
 
-I am especially interested in building virtual labs, solving technical challenges, and continuously improving in both defensive and offensive security environments.
-
-## Portfolio Structure
-
-The website is divided into the following sections:
-
-### About
-Personal introduction, professional profile, and main areas of work.
-
-### Resume
-Includes:
-
-- academic background
-- professional experience
-- technical skills
-
-### Portfolio
-Showcases projects organized into categories such as:
-
-- Ethical Hacking
-- Network and System Hardening
-- Computer Forensics
-- Cybersecurity Regulations
-- Others
-
-### Blog
-A section for posts, events, and updates related to my professional development.
-
-### Contact
-Contact information, location, and contact form.
+- Linux and Windows systems administration
+- Digital forensics
+- Ethical hacking and pentesting
+- Security monitoring and incident response
+- Secure development
+- Automation and internal tooling
 
 ## Technologies Used
-
-This portfolio was built using core web technologies:
 
 - HTML5
 - CSS3
 - JavaScript
+- EmailJS
 - Ionicons
 - Google Fonts
 
-## Features
+## Current Features
 
-- single-page personal portfolio design
-- section-based navigation
-- sidebar with personal information and contact details
-- project gallery with category filtering
-- testimonials section
-- blog section
-- embedded map
-- contact form
+- Responsive layout for mobile, tablet, and desktop
+- Sidebar with personal details and direct contact information
+- Resume section with education, experience, and skills
+- Filterable project gallery with improved project descriptions
+- Testimonials section with modal view
+- Blog section for events, milestones, and future publications
+- Embedded map in the contact section
+- Contact form with integrated visual success and error feedback
 
-## Featured Projects
+## Project Categories
 
-Some of the projects included in this portfolio are:
+- Ethical hacking
+- System hardening
+- Computer forensics
+- Cybersecurity regulations
+- Others
 
-- **Ciber Monkey**
-- **TPot-investigation**
-- **Firewall Kit**
-- **DockerGen**
-- **DockerAuditor**
-- **Bot Telegram Ubuntu Server**
-- **EviDumpLin**
-- **EviDumpWin**
-- **Parrot OS Book**
-- **AutoShell**
-- **RecoverMail**
-- **Cybersecurity Audit**
-- **Ticket Manager**
-- **AeroWeather**
-- **Linux Academy**
-- **Flag Collector**
+## Projects Included
 
-## Project Goal
+- **Ciber Monkey**: Security-focused toolkit for reconnaissance and offensive lab workflows.
+- **T-Pot Investigation**: Honeypot lab for capturing attacker activity and practicing threat analysis.
+- **Firewall Kit**: Firewall and access-control resources for hardening Linux environments.
+- **DockerGen**: Automated Docker lab and service deployment generator.
+- **DockerAuditor**: Docker-focused auditing utility for reviews and investigations.
+- **Telegram Bot on Ubuntu Server**: Linux-hosted Telegram bot deployment for automation and visibility.
+- **EviDumpLin**: Linux evidence collection utility for forensic triage.
+- **EviDumpWin**: Windows evidence acquisition utility for forensic analysis.
+- **Parrot OS Book**: Educational resource covering Parrot OS tools and workflows.
+- **AutoShell**: Automation project for shell access setup and repetitive offensive tasks.
+- **RecoverMail**: Forensic recovery utility for email-related investigations.
+- **Cybersecurity Audit**: Security assessment focused on data exposure and remediation guidance.
+- **Ticket Manager**: Web-based ticket and issue management platform.
+- **AeroWeather**: Weather-focused web project with aeronautical context.
+- **Linux Academy**: Educational platform concept for Linux learning resources.
+- **Flag Collector**: CTF-oriented utility to organize and track captured flags.
+
+## Goal
 
 The goal of this portfolio is to centralize my professional presence and clearly present:
 
 - who I am
 - the areas I work in
-- my education and experience
-- the projects I have developed
+- the technologies I use
+- the projects I have built
 - how to contact me
