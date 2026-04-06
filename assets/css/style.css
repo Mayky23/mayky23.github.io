@@ -314,7 +314,7 @@ main {
 
 .sidebar {
   margin-bottom: 15px;
-  max-height: 112px;
+  max-height: 148px;
   overflow: hidden;
   transition: var(--transition-2);
 }
@@ -325,21 +325,24 @@ main {
   position: relative;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   gap: 15px;
+  padding-right: 52px;
 }
 
 .avatar-box {
   background: var(--bg-gradient-onyx);
   border-radius: 20px;
+  flex-shrink: 0;
 }
 
 .info-content .name {
   color: var(--white-2);
   font-size: var(--fs-3);
   font-weight: var(--fw-500);
+  line-height: 1.2;
   letter-spacing: -0.25px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .info-content .title {
@@ -347,16 +350,17 @@ main {
   background: var(--onyx);
   font-size: var(--fs-8);
   font-weight: var(--fw-300);
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   padding: 3px 12px;
   border-radius: 8px;
+  line-height: 1.5;
 }
 
 .info_more-btn {
   position: absolute;
-  top: -15px;
-  right: -15px;
+  top: 0;
+  right: 0;
   border-radius: 0 15px;
   font-size: 13px;
   color: var(--orange-yellow-crayola);
@@ -394,6 +398,11 @@ main {
 .sidebar.active .sidebar-info_more {
   opacity: 1;
   visibility: visible;
+}
+
+.info-content {
+  min-width: 0;
+  flex: 1;
 }
 
 .contacts-list {
@@ -1403,7 +1412,11 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .sidebar.active { max-height: 584px; }
 
-  .sidebar-info { gap: 25px; }
+  .sidebar-info {
+    align-items: center;
+    gap: 25px;
+    padding-right: 0;
+  }
 
   .avatar-box { border-radius: 30px; }
 
@@ -1411,7 +1424,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .info-content .name { margin-bottom: 15px; }
 
-  .info-content .title { padding: 5px 18px; }
+  .info-content .title {
+    width: fit-content;
+    padding: 5px 18px;
+  }
 
   .info_more-btn {
     top: -30px;
