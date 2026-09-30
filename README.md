@@ -1,86 +1,47 @@
-# MARH Portfolio
+# Portfolio · Miguel Ángel Roldán de Haro
 
-Personal portfolio of **Miguel Ángel Roldán de Haro**, focused on **cybersecurity**, **digital forensics**, **system hardening**, and **application development**.
+Portfolio personal de ciberseguridad: SOC, DFIR, Wazuh SIEM, hardening y automatización.
 
-This site works as a professional showcase for my profile, experience, technical skills, projects, publications, and contact information.
+🌐 **https://mayky23.github.io**
 
-🌐 **Live website:**  
-https://mayky23.github.io
+## Contenido
 
-## Overview
+- **Sobre mí**, **Trayectoria** (experiencia, formación y competencias), **Portfolio** (16 proyectos filtrables por categoría) y **Contacto** (formulario con EmailJS).
+- Responsive, con enlaces directos a cada sección (`/#resume`, `/#portfolio`, `/#contact`).
+- SEO: Open Graph/Twitter Card, JSON-LD, `sitemap.xml` y `robots.txt`.
+- Accesibilidad: skip link, navegación por teclado y `prefers-reduced-motion`.
 
-The portfolio is built as a single-page website with dedicated sections for:
+## Stack
 
-- About
-- Resume
-- Portfolio
-- Blog
-- Contact
+HTML, CSS y JavaScript sin frameworks · [EmailJS](https://www.emailjs.com/) · [Ionicons](https://ionic.io/ionicons) · Google Fonts (Poppins).
 
-It is designed to be fully responsive across mobile phones, tablets, laptops, and desktop screens.
+## Estructura
 
-## Main Focus Areas
+```
+index.html             página única
+assets/css, assets/js  estilos y lógica
+assets/images/         avatar, iconos, portadas (optimized/) y cover social
+tools/                 scripts para generar imágenes
+```
 
-- Linux and Windows systems administration
-- Digital forensics
-- Ethical hacking and pentesting
-- Security monitoring and incident response
-- Secure development
-- Automation and internal tooling
+## Desarrollo
 
-## Technologies Used
+Es un sitio estático: sirve la carpeta en local.
 
-- HTML5
-- CSS3
-- JavaScript
-- EmailJS
-- Ionicons
-- Google Fonts
+```bash
+python -m http.server 8000
+```
 
-## Current Features
+Para regenerar las imágenes (requiere Pillow):
 
-- Responsive layout for mobile, tablet, and desktop
-- Sidebar with personal details and direct contact information
-- Resume section with education, experience, and skills
-- Filterable project gallery with improved project descriptions
-- Testimonials section with modal view
-- Blog section for events, milestones, and future publications
-- Embedded map in the contact section
-- Contact form with integrated visual success and error feedback
+```bash
+python tools/optimize_images.py
+```
 
-## Project Categories
+Genera las portadas en WebP (640 y 1200 px para `srcset`), el avatar, el favicon y `og-cover.jpg`.
 
-- Ethical hacking
-- System hardening
-- Computer forensics
-- Cybersecurity regulations
-- Others
+## Añadir un proyecto
 
-## Projects Included
-
-- **Ciber Monkey**: Security-focused toolkit for reconnaissance and offensive lab workflows.
-- **T-Pot Investigation**: Honeypot lab for capturing attacker activity and practicing threat analysis.
-- **Firewall Kit**: Firewall and access-control resources for hardening Linux environments.
-- **DockerGen**: Automated Docker lab and service deployment generator.
-- **DockerAuditor**: Docker-focused auditing utility for reviews and investigations.
-- **Telegram Bot on Ubuntu Server**: Linux-hosted Telegram bot deployment for automation and visibility.
-- **EviDumpLin**: Linux evidence collection utility for forensic triage.
-- **EviDumpWin**: Windows evidence acquisition utility for forensic analysis.
-- **Parrot OS Book**: Educational resource covering Parrot OS tools and workflows.
-- **AutoShell**: Automation project for shell access setup and repetitive offensive tasks.
-- **RecoverMail**: Forensic recovery utility for email-related investigations.
-- **Cybersecurity Audit**: Security assessment focused on data exposure and remediation guidance.
-- **Ticket Manager**: Web-based ticket and issue management platform.
-- **AeroWeather**: Weather-focused web project with aeronautical context.
-- **Linux Academy**: Educational platform concept for Linux learning resources.
-- **Flag Collector**: CTF-oriented utility to organize and track captured flags.
-
-## Goal
-
-The goal of this portfolio is to centralize my professional presence and clearly present:
-
-- who I am
-- the areas I work in
-- the technologies I use
-- the projects I have built
-- how to contact me
+1. Copia una `<li class="project-item">` en `index.html` y usa una categoría existente en `data-category`.
+2. Guarda la portada en `assets/images/optimized/<nombre>.jpg` (1200×675) y ejecuta el script de imágenes.
+3. Apunta `src` y `srcset` a `<nombre>-640.webp` y `<nombre>-1200.webp`.

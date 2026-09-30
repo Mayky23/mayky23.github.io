@@ -3,23 +3,16 @@
 const APP_CONFIG = Object.freeze({
   email: {
     publicKey: ['d0xtWDQxczcxWElfczNJejk='],
-    serviceId: ['c2VydmljZV9ldzh0ZWdk'],
+    serviceId: ['c2VydmljZV91OWNjNm90'],
     templateId: ['dGVtcGxhdGVfY3psdGZtag=='],
     minSubmitDelayMs: 1500
   },
   selectors: {
     sidebar: '[data-sidebar]',
     sidebarButton: '[data-sidebar-btn]',
-    testimonialItems: '[data-testimonials-item]',
-    modalContainer: '[data-modal-container]',
-    modalCloseButton: '[data-modal-close-btn]',
-    modalOverlay: '[data-overlay]',
-    modalImage: '[data-modal-img]',
-    modalTitle: '[data-modal-title]',
-    modalText: '[data-modal-text]',
     filterSelect: '[data-select]',
     filterSelectItems: '[data-select-item]',
-    filterSelectValue: '[data-selecct-value]',
+    filterSelectValue: '[data-select-value]',
     filterButtons: '[data-filter-btn]',
     filterItems: '[data-filter-item]',
     form: '[data-form]',
@@ -97,52 +90,9 @@ const initSidebar = () => {
     return;
   }
 
-  sidebarButton.addEventListener('click', () => toggleClass(sidebar));
-};
-
-const initTestimonials = () => {
-  const items = dom.queryAll(APP_CONFIG.selectors.testimonialItems);
-  const modalContainer = dom.query(APP_CONFIG.selectors.modalContainer);
-  const closeButton = dom.query(APP_CONFIG.selectors.modalCloseButton);
-  const overlay = dom.query(APP_CONFIG.selectors.modalOverlay);
-  const modalImage = dom.query(APP_CONFIG.selectors.modalImage);
-  const modalTitle = dom.query(APP_CONFIG.selectors.modalTitle);
-  const modalText = dom.query(APP_CONFIG.selectors.modalText);
-
-  if (!items.length || !modalContainer || !overlay || !modalImage || !modalTitle || !modalText) {
-    return;
-  }
-
-  const setModalState = (isOpen) => {
-    toggleClass(modalContainer, 'active', isOpen);
-    toggleClass(overlay, 'active', isOpen);
-  };
-
-  items.forEach((item) => {
-    item.addEventListener('click', () => {
-      const avatar = dom.query('[data-testimonials-avatar]', item);
-      const title = dom.query('[data-testimonials-title]', item);
-      const text = dom.query('[data-testimonials-text]', item);
-
-      if (!avatar || !title || !text) {
-        return;
-      }
-
-      modalImage.src = avatar.src;
-      modalImage.alt = avatar.alt;
-      updateText(modalTitle, title.textContent?.trim() || 'Testimonial');
-      modalText.replaceChildren(text.cloneNode(true));
-      setModalState(true);
-    });
-  });
-
-  closeButton?.addEventListener('click', () => setModalState(false));
-  overlay.addEventListener('click', () => setModalState(false));
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      setModalState(false);
-    }
+  sidebarButton.addEventListener('click', () => {
+    const isOpen = toggleClass(sidebar);
+    sidebarButton.setAttribute('aria-expanded', String(isOpen));
   });
 };
 
@@ -168,32 +118,47 @@ const initProjectFilters = () => {
   const setActiveFilterButton = (activeButton) => {
     filterButtons.forEach((button) => {
       toggleClass(button, 'active', button === activeButton);
+      button.setAttribute('aria-pressed', String(button === activeButton));
     });
   };
 
-  select?.addEventListener('click', () => toggleClass(select));
+  const setSelectOpen = (open) => {
+    toggleClass(select, 'active', open);
+    select?.setAttribute('aria-expanded', String(open));
+  };
+
+  select?.addEventListener('click', () => setSelectOpen(!select.classList.contains('active')));
 
   selectItems.forEach((item) => {
     item.addEventListener('click', () => {
-      const label = item.textContent?.trim() || 'All';
+      const label = item.textContent?.trim() || 'Todo';
+      const filterValue = item.dataset.selectItem || 'All';
       updateText(selectValue, label);
-      toggleClass(select, 'active', false);
-      applyFilter(label.toLowerCase());
+      setSelectOpen(false);
+      applyFilter(filterValue.toLowerCase());
     });
   });
 
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const label = button.textContent?.trim() || 'All';
+      const label = button.textContent?.trim() || 'Todo';
+      const filterValue = button.dataset.filterBtn || 'All';
       updateText(selectValue, label);
-      applyFilter(label.toLowerCase());
+      applyFilter(filterValue.toLowerCase());
       setActiveFilterButton(button);
     });
   });
 
   document.addEventListener('click', (event) => {
     if (select && !select.parentElement?.contains(event.target)) {
-      toggleClass(select, 'active', false);
+      setSelectOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && select?.classList.contains('active')) {
+      setSelectOpen(false);
+      select.focus();
     }
   });
 };
@@ -206,21 +171,42 @@ const initNavigation = () => {
     return;
   }
 
+  const pageNames = pages.map((page) => page.dataset.page);
+
+  const showPage = (targetPage) => {
+    pages.forEach((page) => {
+      toggleClass(page, 'active', page.dataset.page === targetPage);
+    });
+
+    navigationLinks.forEach((navLink) => {
+      const isActive = navLink.dataset.navLink === targetPage;
+      toggleClass(navLink, 'active', isActive);
+      if (isActive) {
+        navLink.setAttribute('aria-current', 'page');
+      } else {
+        navLink.removeAttribute('aria-current');
+      }
+    });
+  };
+
   navigationLinks.forEach((link) => {
     link.addEventListener('click', () => {
-      const targetPage = link.textContent?.trim().toLowerCase();
-
-      pages.forEach((page) => {
-        toggleClass(page, 'active', page.dataset.page === targetPage);
-      });
-
-      navigationLinks.forEach((navLink) => {
-        toggleClass(navLink, 'active', navLink === link);
-      });
-
+      const targetPage = link.dataset.navLink;
+      showPage(targetPage);
+      history.replaceState(null, '', targetPage === pageNames[0] ? location.pathname : `#${targetPage}`);
       scrollToTop();
     });
   });
+
+  const showPageFromHash = () => {
+    const hashPage = location.hash.slice(1);
+    if (pageNames.includes(hashPage)) {
+      showPage(hashPage);
+    }
+  };
+
+  window.addEventListener('hashchange', showPageFromHash);
+  showPageFromHash();
 };
 
 const initContactForm = () => {
@@ -247,11 +233,14 @@ const initContactForm = () => {
     isSubmitting = loading;
     submitButton.disabled = loading || !form.checkValidity();
     toggleClass(submitButton, 'is-loading', loading);
-    updateText(submitLabel, loading ? 'Sending...' : 'Send Message');
+    updateText(submitLabel, loading ? 'Enviando...' : 'Enviar mensaje');
   };
 
-  const validateForm = () => {
-    inputs.forEach((input) => sanitizeFieldValue(input));
+  const validateForm = ({ sanitize = false } = {}) => {
+    if (sanitize) {
+      inputs.forEach((input) => sanitizeFieldValue(input));
+    }
+
     submitButton.disabled = !form.checkValidity() || isSubmitting;
     return form.checkValidity();
   };
@@ -274,16 +263,42 @@ const initContactForm = () => {
 
   const emailConfig = initializeEmailJs();
 
+  const getEmailErrorMessage = (error) => {
+    const status = Number(error?.status);
+    const text = String(error?.text || error?.message || '').toLowerCase();
+
+    if (text.includes('invalid grant') || text.includes('gmail_api')) {
+      return 'No se ha podido enviar: hay que reconectar la cuenta de Gmail en EmailJS.';
+    }
+
+    if (status === 401 || status === 403 || text.includes('origin') || text.includes('public key')) {
+      return 'No se ha podido enviar: revisa la configuración de EmailJS, la clave pública o los dominios permitidos.';
+    }
+
+    if (status === 400 || text.includes('template') || text.includes('service')) {
+      return 'No se ha podido enviar: revisa el Service ID, Template ID o las variables de la plantilla de EmailJS.';
+    }
+
+    if (status === 429) {
+      return 'No se ha podido enviar: se ha alcanzado el límite temporal de envíos. Inténtalo de nuevo más tarde.';
+    }
+
+    if (!navigator.onLine || status === 0) {
+      return 'No se ha podido enviar: revisa la conexión a internet y vuelve a intentarlo.';
+    }
+
+    return 'Ha ocurrido un error al enviar tu mensaje. Inténtalo de nuevo en unos minutos.';
+  };
+
   inputs.forEach((input) => {
     input.addEventListener('input', () => {
-      sanitizeFieldValue(input);
       if (statusBox.dataset.state === 'error') {
         setStatus('', '');
       }
       validateForm();
     });
 
-    input.addEventListener('blur', () => sanitizeFieldValue(input));
+    input.addEventListener('blur', () => validateForm({ sanitize: true }));
   });
 
   validateForm();
@@ -294,23 +309,23 @@ const initContactForm = () => {
     const honeypot = form.elements.namedItem('company_website');
     if (honeypot instanceof HTMLInputElement && honeypot.value.trim() !== '') {
       form.reset();
-      validateForm();
+      validateForm({ sanitize: true });
       return;
     }
 
     if (!emailConfig) {
-      setStatus('The contact service is temporarily unavailable. You can reach me directly by email.', 'error');
+      setStatus('El servicio de contacto no está disponible temporalmente. Puedes escribirme directamente por email.', 'error');
       return;
     }
 
     const now = Date.now();
     if (isSubmitting || now - lastSubmittedAt < APP_CONFIG.email.minSubmitDelayMs) {
-      setStatus('Please wait a moment before sending another message.', 'error');
+      setStatus('Espera un momento antes de enviar otro mensaje.', 'error');
       return;
     }
 
-    if (!validateForm()) {
-      setStatus('Please review the form fields before submitting.', 'error');
+    if (!validateForm({ sanitize: true })) {
+      setStatus('Revisa los campos del formulario antes de enviarlo.', 'error');
       return;
     }
 
@@ -318,13 +333,19 @@ const initContactForm = () => {
     setSubmitState(true);
 
     try {
-      await emailjs.sendForm(emailConfig.serviceId, emailConfig.templateId, form);
+      await emailjs.sendForm(emailConfig.serviceId, emailConfig.templateId, form, {
+        publicKey: emailConfig.publicKey
+      });
       lastSubmittedAt = Date.now();
       form.reset();
-      setStatus('Your message has been sent successfully. I will reply as soon as possible.', 'success');
+      setStatus('Tu mensaje se ha enviado correctamente. Responderé lo antes posible.', 'success');
     } catch (error) {
-      console.error('EmailJS error:', error);
-      setStatus('There was an error sending your message. Please try again in a few minutes.', 'error');
+      console.error('EmailJS error:', {
+        status: error?.status,
+        text: error?.text,
+        message: error?.message
+      });
+      setStatus(getEmailErrorMessage(error), 'error');
     } finally {
       setSubmitState(false);
     }
@@ -333,7 +354,6 @@ const initContactForm = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
-  initTestimonials();
   initProjectFilters();
   initNavigation();
   initContactForm();
