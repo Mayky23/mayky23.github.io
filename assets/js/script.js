@@ -14,6 +14,41 @@ const EMAIL_CONFIG = Object.freeze({
 
 document.documentElement.classList.add('js');
 
+/* ---------- Modo claro / oscuro ---------- */
+
+const THEME_COLORS = { light: '#E9ECEF', dark: '#121923' };
+
+const readStoredTheme = () => {
+  try { return localStorage.getItem('theme'); } catch { return null; }
+};
+
+const initThemeToggle = () => {
+  const button = document.querySelector('[data-theme-toggle]');
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const apply = (theme) => {
+    root.setAttribute('data-theme', theme);
+    document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.setAttribute('content', THEME_COLORS[theme]));
+    if (button) {
+      button.setAttribute('aria-label', theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro');
+    }
+  };
+
+  apply(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+  button?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem('theme', next); } catch { /* sin almacenamiento: dura solo esta visita */ }
+  });
+
+  // Si el visitante no ha elegido, se sigue el tema del sistema en vivo
+  media.addEventListener?.('change', (event) => {
+    if (!readStoredTheme()) apply(event.matches ? 'dark' : 'light');
+  });
+};
+
 /* ---------- Filtros de proyectos ---------- */
 
 const initFilters = () => {
@@ -206,6 +241,7 @@ const initContactForm = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
   initFilters();
   initActiveNav();
   initContactForm();

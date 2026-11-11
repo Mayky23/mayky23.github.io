@@ -10,7 +10,7 @@ Una sola página con cuatro secciones: **Perfil** (`/#about`), **Proyectos** (`/
 
 La identidad visual toma el lenguaje de una investigación forense: la portada es una etiqueta de evidencia con precinto y la trayectoria es una línea de tiempo con fechas ISO.
 
-- Tema claro y oscuro automático según el sistema (`prefers-color-scheme`).
+- Modo claro y oscuro: sigue el sistema por defecto y el botón de la cabecera permite cambiarlo (se recuerda en `localStorage`). `assets/js/theme-init.js` aplica el tema antes de pintar para evitar parpadeos.
 - Accesibilidad: skip link, foco visible, navegación por teclado, `prefers-reduced-motion`, mensajes de error asociados a cada campo.
 - SEO: Open Graph/Twitter Card, JSON-LD, `sitemap.xml` y `robots.txt`.
 - Sin recursos de terceros en la carga: fuentes, iconos y EmailJS se sirven desde el propio repo, con una Content-Security-Policy estricta.
