@@ -255,12 +255,14 @@ main:focus { outline: none; }
   font-size: 16.4cqi;
   font-weight: 800;
   font-stretch: 62%;
-  line-height: 0.86;
-  letter-spacing: -0.015em;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  word-spacing: 0.06em;
   text-wrap: balance;
 }
 
 .hero-name span { display: block; white-space: nowrap; }
+.hero-name span + span { margin-top: 0.06em; }
 
 .hero-lede {
   max-width: 34em;
