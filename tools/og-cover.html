@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<!--
+  Plantilla de la imagen para redes sociales (1200x630).
+  Se renderiza con: python tools/make_og_cover.py
+-->
+<head>
+  <meta charset="UTF-8">
+  <title>og-cover</title>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo-var.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Martian Mono"; src: url("../assets/fonts/martian-mono-var.woff2") format("woff2"); font-weight: 100 800; }
+    * { box-sizing: border-box; margin: 0; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body {
+      display: grid; grid-template-columns: 1fr 430px; align-items: center; gap: 56px;
+      padding: 0 72px 0 80px; background: #E9ECEF; color: #172030; font-family: "Archivo", sans-serif;
+    }
+    h1 { font-size: 112px; font-weight: 800; font-stretch: 62%; line-height: .86; letter-spacing: -.015em; }
+    h1 span { display: block; white-space: nowrap; }
+    p.lede { margin-top: 30px; font-size: 30px; line-height: 1.35; font-stretch: 92%; max-width: 15em; }
+    p.url { margin-top: 34px; font-family: "Martian Mono", monospace; font-size: 20px; color: #B3122B; font-weight: 600; }
+    .tag { background: #F7F8F9; border: 1px solid #C5CBD3; border-radius: 3px; transform: rotate(-3deg);
+           box-shadow: 0 24px 50px -28px rgba(23,32,48,.55); position: relative; }
+    .tag::before { content: ""; position: absolute; top: 58px; right: 22px; width: 16px; height: 16px; border-radius: 50%;
+           background: #E9ECEF; border: 1px solid #C5CBD3; }
+    .tape { display: flex; gap: 26px; overflow: hidden; margin: 0 -16px; padding: 8px 18px; background: #B3122B; color: #fff;
+            font-size: 15px; font-weight: 700; font-stretch: 75%; white-space: nowrap; }
+    .body { padding: 22px 26px 26px; }
+    .head { display: flex; gap: 16px; align-items: center; padding-bottom: 18px; border-bottom: 1px dashed #C5CBD3; }
+    .head img { width: 84px; height: 84px; border: 1px solid #C5CBD3; border-radius: 3px; background: #E9ECEF; }
+    .case { font-size: 15px; color: #556070; } .case b { font-family: "Martian Mono", monospace; color: #B3122B; font-size: 13px; }
+    .title { font-size: 30px; font-weight: 750; font-stretch: 75%; line-height: 1.1; }
+    dl { display: grid; gap: 12px; padding-top: 16px; }
+    dt { font-size: 14px; color: #556070; } dd { font-size: 19px; font-weight: 500; line-height: 1.3; }
+  </style>
+</head>
+<body>
+  <div>
+    <h1><span>Miguel Ángel</span><span>Roldán de Haro</span></h1>
+    <p class="lede">Analista SOC L1 y DFIR. Detección y respuesta, forense digital y hardening.</p>
+    <p class="url">mayky23.github.io</p>
+  </div>
+  <div class="tag">
+    <div class="tape"><span>Precinto de evidencia</span><span>Precinto de evidencia</span><span>Precinto de evidencia</span></div>
+    <div class="body">
+      <div class="head">
+        <img src="../assets/images/avatar/avatar-320.png" alt="">
+        <div><p class="case">Caso <b>MARDH</b></p><p class="title">Ficha del analista</p></div>
+      </div>
+      <dl>
+        <div><dt>Puesto</dt><dd>SOC L1 en Trevenque Group</dd></div>
+        <div><dt>Base</dt><dd>Granada, España</dd></div>
+        <div><dt>Herramientas</dt><dd>Wazuh SIEM, SOCFortress SOAR, Acronis EDR</dd></div>
+      </dl>
+    </div>
+  </div>
+</body>
+</html>
