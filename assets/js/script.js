@@ -1,360 +1,248 @@
 'use strict';
 
-const APP_CONFIG = Object.freeze({
-  email: {
-    publicKey: ['d0xtWDQxczcxWElfczNJejk='],
-    serviceId: ['c2VydmljZV91OWNjNm90'],
-    templateId: ['dGVtcGxhdGVfY3psdGZtag=='],
-    minSubmitDelayMs: 1500
-  },
-  selectors: {
-    sidebar: '[data-sidebar]',
-    sidebarButton: '[data-sidebar-btn]',
-    filterSelect: '[data-select]',
-    filterSelectItems: '[data-select-item]',
-    filterSelectValue: '[data-select-value]',
-    filterButtons: '[data-filter-btn]',
-    filterItems: '[data-filter-item]',
-    form: '[data-form]',
-    formInputs: '[data-form-input]',
-    formButton: '[data-form-btn]',
-    formStatus: '[data-form-status]',
-    navigationLinks: '[data-nav-link]',
-    pages: '[data-page]'
-  }
+/*
+  EmailJS: estos tres valores son públicos por diseño (viajan al navegador
+  en cualquier caso). La protección real está en el panel de EmailJS:
+  limita los dominios permitidos a mayky23.github.io.
+*/
+const EMAIL_CONFIG = Object.freeze({
+  publicKey: 'wLmX41s71XI_s3Iz9',
+  serviceId: 'service_u9cc6ot',
+  templateId: 'template_czltfmj',
+  minSubmitDelayMs: 1500
 });
 
-const dom = {
-  query(selector, scope = document) {
-    return scope.querySelector(selector);
-  },
-  queryAll(selector, scope = document) {
-    return Array.from(scope.querySelectorAll(selector));
-  }
+document.documentElement.classList.add('js');
+
+/* ---------- Modo claro / oscuro ---------- */
+
+const THEME_COLORS = { light: '#E9ECEF', dark: '#121923' };
+
+const readStoredTheme = () => {
+  try { return localStorage.getItem('theme'); } catch { return null; }
 };
 
-const decodeValue = (parts) => atob(parts.join(''));
+const initThemeToggle = () => {
+  const button = document.querySelector('[data-theme-toggle]');
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
 
-const toggleClass = (element, className = 'active', force) => {
-  if (!element) {
-    return false;
-  }
-
-  if (typeof force === 'boolean') {
-    element.classList.toggle(className, force);
-    return force;
-  }
-
-  return element.classList.toggle(className);
-};
-
-const updateText = (element, value) => {
-  if (element) {
-    element.textContent = value;
-  }
-};
-
-const normalizeSpaces = (value) => value.replace(/\s+/g, ' ').trim();
-
-const sanitizeFieldValue = (field) => {
-  if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
-    return;
-  }
-
-  const trimmedValue = field.value.trim();
-
-  if (field.name === 'from_name') {
-    field.value = normalizeSpaces(trimmedValue);
-    return;
-  }
-
-  if (field.name === 'reply_to') {
-    field.value = trimmedValue.toLowerCase();
-    return;
-  }
-
-  if (field.tagName === 'TEXTAREA') {
-    field.value = trimmedValue.replace(/\r\n/g, '\n');
-  }
-};
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-const initSidebar = () => {
-  const sidebar = dom.query(APP_CONFIG.selectors.sidebar);
-  const sidebarButton = dom.query(APP_CONFIG.selectors.sidebarButton);
-
-  if (!sidebar || !sidebarButton) {
-    return;
-  }
-
-  sidebarButton.addEventListener('click', () => {
-    const isOpen = toggleClass(sidebar);
-    sidebarButton.setAttribute('aria-expanded', String(isOpen));
-  });
-};
-
-const initProjectFilters = () => {
-  const select = dom.query(APP_CONFIG.selectors.filterSelect);
-  const selectItems = dom.queryAll(APP_CONFIG.selectors.filterSelectItems);
-  const selectValue = dom.query(APP_CONFIG.selectors.filterSelectValue);
-  const filterButtons = dom.queryAll(APP_CONFIG.selectors.filterButtons);
-  const filterItems = dom.queryAll(APP_CONFIG.selectors.filterItems);
-
-  if (!filterItems.length) {
-    return;
-  }
-
-  const applyFilter = (selectedValue) => {
-    filterItems.forEach((item) => {
-      const category = (item.dataset.category || '').toLowerCase();
-      const shouldShow = selectedValue === 'all' || selectedValue === category;
-      toggleClass(item, 'active', shouldShow);
-    });
-  };
-
-  const setActiveFilterButton = (activeButton) => {
-    filterButtons.forEach((button) => {
-      toggleClass(button, 'active', button === activeButton);
-      button.setAttribute('aria-pressed', String(button === activeButton));
-    });
-  };
-
-  const setSelectOpen = (open) => {
-    toggleClass(select, 'active', open);
-    select?.setAttribute('aria-expanded', String(open));
-  };
-
-  select?.addEventListener('click', () => setSelectOpen(!select.classList.contains('active')));
-
-  selectItems.forEach((item) => {
-    item.addEventListener('click', () => {
-      const label = item.textContent?.trim() || 'Todo';
-      const filterValue = item.dataset.selectItem || 'All';
-      updateText(selectValue, label);
-      setSelectOpen(false);
-      applyFilter(filterValue.toLowerCase());
-    });
-  });
-
-  filterButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const label = button.textContent?.trim() || 'Todo';
-      const filterValue = button.dataset.filterBtn || 'All';
-      updateText(selectValue, label);
-      applyFilter(filterValue.toLowerCase());
-      setActiveFilterButton(button);
-    });
-  });
-
-  document.addEventListener('click', (event) => {
-    if (select && !select.parentElement?.contains(event.target)) {
-      setSelectOpen(false);
-    }
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && select?.classList.contains('active')) {
-      setSelectOpen(false);
-      select.focus();
-    }
-  });
-};
-
-const initNavigation = () => {
-  const navigationLinks = dom.queryAll(APP_CONFIG.selectors.navigationLinks);
-  const pages = dom.queryAll(APP_CONFIG.selectors.pages);
-
-  if (!navigationLinks.length || !pages.length) {
-    return;
-  }
-
-  const pageNames = pages.map((page) => page.dataset.page);
-
-  const showPage = (targetPage) => {
-    pages.forEach((page) => {
-      toggleClass(page, 'active', page.dataset.page === targetPage);
-    });
-
-    navigationLinks.forEach((navLink) => {
-      const isActive = navLink.dataset.navLink === targetPage;
-      toggleClass(navLink, 'active', isActive);
-      if (isActive) {
-        navLink.setAttribute('aria-current', 'page');
-      } else {
-        navLink.removeAttribute('aria-current');
-      }
-    });
-  };
-
-  navigationLinks.forEach((link) => {
-    link.addEventListener('click', () => {
-      const targetPage = link.dataset.navLink;
-      showPage(targetPage);
-      history.replaceState(null, '', targetPage === pageNames[0] ? location.pathname : `#${targetPage}`);
-      scrollToTop();
-    });
-  });
-
-  const showPageFromHash = () => {
-    const hashPage = location.hash.slice(1);
-    if (pageNames.includes(hashPage)) {
-      showPage(hashPage);
+  const apply = (theme) => {
+    root.setAttribute('data-theme', theme);
+    document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.setAttribute('content', THEME_COLORS[theme]));
+    if (button) {
+      button.setAttribute('aria-label', theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro');
     }
   };
 
-  window.addEventListener('hashchange', showPageFromHash);
-  showPageFromHash();
+  apply(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+  button?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem('theme', next); } catch { /* sin almacenamiento: dura solo esta visita */ }
+  });
+
+  // Si el visitante no ha elegido, se sigue el tema del sistema en vivo
+  media.addEventListener?.('change', (event) => {
+    if (!readStoredTheme()) apply(event.matches ? 'dark' : 'light');
+  });
+};
+
+/* ---------- Filtros de proyectos ---------- */
+
+const initFilters = () => {
+  const group = document.querySelector('[data-filters]');
+  const status = document.querySelector('[data-filter-status]');
+  const entries = Array.from(document.querySelectorAll('.archive .entry'));
+  if (!group || !entries.length) return;
+
+  const buttons = Array.from(group.querySelectorAll('button[data-filter]'));
+
+  const apply = (button) => {
+    const value = button.dataset.filter;
+    let shown = 0;
+
+    entries.forEach((entry) => {
+      const match = value === 'all' || entry.dataset.category === value;
+      entry.hidden = !match;
+      if (match) shown += 1;
+    });
+
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+
+    if (status) {
+      const label = button.firstChild?.textContent?.trim() || '';
+      status.textContent = value === 'all'
+        ? `Mostrando los ${shown} proyectos`
+        : `Mostrando ${shown} ${shown === 1 ? 'proyecto' : 'proyectos'} de ${label}`;
+    }
+  };
+
+  buttons.forEach((button) => button.addEventListener('click', () => apply(button)));
+};
+
+/* ---------- Sección activa en el menú ---------- */
+
+const initActiveNav = () => {
+  const links = Array.from(document.querySelectorAll('[data-nav]'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+
+  const byId = new Map(links.map((link) => [link.hash.slice(1), link]));
+  const sections = Array.from(byId.keys())
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+
+  const setActive = (id) => {
+    links.forEach((link) => {
+      if (link.hash.slice(1) === id) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  const visible = new Set();
+  const observer = new IntersectionObserver((records) => {
+    records.forEach((r) => (r.isIntersecting ? visible.add(r.target.id) : visible.delete(r.target.id)));
+    const current = sections.find((s) => visible.has(s.id));
+    setActive(current ? current.id : null);
+  }, { rootMargin: '-45% 0px -50% 0px' });
+
+  sections.forEach((s) => observer.observe(s));
+};
+
+/* ---------- Formulario de contacto ---------- */
+
+const MESSAGES = {
+  from_name: 'Escribe tu nombre.',
+  reply_to: 'Escribe un correo válido, por ejemplo nombre@dominio.com.',
+  message: 'Escribe el mensaje.'
+};
+
+const sanitize = (field) => {
+  const value = field.value.trim();
+  if (field.name === 'from_name') field.value = value.replace(/\s+/g, ' ');
+  else if (field.name === 'reply_to') field.value = value.toLowerCase();
+  else if (field.tagName === 'TEXTAREA') field.value = value.replace(/\r\n/g, '\n');
+};
+
+const setFieldError = (field, message) => {
+  const id = `${field.id}-error`;
+  let node = document.getElementById(id);
+
+  if (message) {
+    if (!node) {
+      node = document.createElement('p');
+      node.id = id;
+      node.className = 'field-error';
+      field.insertAdjacentElement('afterend', node);
+    }
+    node.textContent = message;
+    field.setAttribute('aria-invalid', 'true');
+    field.setAttribute('aria-describedby', id);
+  } else {
+    node?.remove();
+    field.removeAttribute('aria-invalid');
+    field.removeAttribute('aria-describedby');
+  }
+};
+
+const errorMessageFor = (error) => {
+  const code = Number(error?.status);
+  const text = String(error?.text || error?.message || '').toLowerCase();
+
+  if (code === 429) return 'Se ha alcanzado el límite de envíos. Vuelve a intentarlo más tarde o escríbeme por email.';
+  if (!navigator.onLine || code === 0) return 'Sin conexión. Revisa tu conexión a internet y vuelve a enviarlo.';
+  if (code === 401 || code === 403 || text.includes('origin') || text.includes('public key')) {
+    return 'El formulario no está disponible ahora mismo. Escríbeme directamente a maroldandh@gmail.com.';
+  }
+  return 'No se ha podido enviar el mensaje. Vuelve a intentarlo en unos minutos o escríbeme a maroldandh@gmail.com.';
 };
 
 const initContactForm = () => {
-  const form = dom.query(APP_CONFIG.selectors.form);
-  const inputs = dom.queryAll(APP_CONFIG.selectors.formInputs);
-  const submitButton = dom.query(APP_CONFIG.selectors.formButton);
-  const statusBox = dom.query(APP_CONFIG.selectors.formStatus);
-  const submitLabel = submitButton ? dom.query('span', submitButton) : null;
+  const form = document.querySelector('[data-form]');
+  if (!form) return;
 
-  if (!form || !inputs.length || !submitButton || !statusBox) {
-    return;
-  }
+  const button = form.querySelector('[data-form-btn]');
+  const status = form.querySelector('[data-form-status]');
+  const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
+  let sending = false;
+  let lastSentAt = 0;
 
-  let isSubmitting = false;
-  let lastSubmittedAt = 0;
-
-  const setStatus = (message, state) => {
-    updateText(statusBox, message);
-    statusBox.dataset.state = state;
-    toggleClass(statusBox, 'is-visible', Boolean(message));
+  const setStatus = (text, state = '') => {
+    status.textContent = text;
+    status.dataset.state = state;
   };
 
-  const setSubmitState = (loading) => {
-    isSubmitting = loading;
-    submitButton.disabled = loading || !form.checkValidity();
-    toggleClass(submitButton, 'is-loading', loading);
-    updateText(submitLabel, loading ? 'Enviando...' : 'Enviar mensaje');
+  const validate = (field) => {
+    sanitize(field);
+    const ok = field.checkValidity();
+    setFieldError(field, ok ? '' : MESSAGES[field.name]);
+    return ok;
   };
 
-  const validateForm = ({ sanitize = false } = {}) => {
-    if (sanitize) {
-      inputs.forEach((input) => sanitizeFieldValue(input));
-    }
-
-    submitButton.disabled = !form.checkValidity() || isSubmitting;
-    return form.checkValidity();
-  };
-
-  const getEmailConfig = () => ({
-    publicKey: decodeValue(APP_CONFIG.email.publicKey),
-    serviceId: decodeValue(APP_CONFIG.email.serviceId),
-    templateId: decodeValue(APP_CONFIG.email.templateId)
-  });
-
-  const initializeEmailJs = () => {
-    if (typeof emailjs === 'undefined') {
-      return null;
-    }
-
-    const config = getEmailConfig();
-    emailjs.init(config.publicKey);
-    return config;
-  };
-
-  const emailConfig = initializeEmailJs();
-
-  const getEmailErrorMessage = (error) => {
-    const status = Number(error?.status);
-    const text = String(error?.text || error?.message || '').toLowerCase();
-
-    if (text.includes('invalid grant') || text.includes('gmail_api')) {
-      return 'No se ha podido enviar: hay que reconectar la cuenta de Gmail en EmailJS.';
-    }
-
-    if (status === 401 || status === 403 || text.includes('origin') || text.includes('public key')) {
-      return 'No se ha podido enviar: revisa la configuración de EmailJS, la clave pública o los dominios permitidos.';
-    }
-
-    if (status === 400 || text.includes('template') || text.includes('service')) {
-      return 'No se ha podido enviar: revisa el Service ID, Template ID o las variables de la plantilla de EmailJS.';
-    }
-
-    if (status === 429) {
-      return 'No se ha podido enviar: se ha alcanzado el límite temporal de envíos. Inténtalo de nuevo más tarde.';
-    }
-
-    if (!navigator.onLine || status === 0) {
-      return 'No se ha podido enviar: revisa la conexión a internet y vuelve a intentarlo.';
-    }
-
-    return 'Ha ocurrido un error al enviar tu mensaje. Inténtalo de nuevo en unos minutos.';
-  };
-
-  inputs.forEach((input) => {
-    input.addEventListener('input', () => {
-      if (statusBox.dataset.state === 'error') {
-        setStatus('', '');
-      }
-      validateForm();
+  fields.forEach((field) => {
+    // Al salir del campo solo se marca (sin insertar texto) para no mover el
+    // botón de envío bajo el cursor; los mensajes aparecen al enviar.
+    field.addEventListener('blur', () => {
+      if (!field.value) return;
+      sanitize(field);
+      if (field.checkValidity()) setFieldError(field, '');
+      else if (!document.getElementById(`${field.id}-error`)) field.setAttribute('aria-invalid', 'true');
     });
-
-    input.addEventListener('blur', () => validateForm({ sanitize: true }));
+    field.addEventListener('input', () => {
+      if (field.getAttribute('aria-invalid') === 'true' && field.checkValidity()) setFieldError(field, '');
+    });
   });
-
-  validateForm();
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const honeypot = form.elements.namedItem('company_website');
-    if (honeypot instanceof HTMLInputElement && honeypot.value.trim() !== '') {
+    if (honeypot && honeypot.value.trim() !== '') {
       form.reset();
-      validateForm({ sanitize: true });
       return;
     }
 
-    if (!emailConfig) {
-      setStatus('El servicio de contacto no está disponible temporalmente. Puedes escribirme directamente por email.', 'error');
+    const invalid = fields.filter((field) => !validate(field));
+    if (invalid.length) {
+      setStatus('');
+      invalid[0].focus();
       return;
     }
 
-    const now = Date.now();
-    if (isSubmitting || now - lastSubmittedAt < APP_CONFIG.email.minSubmitDelayMs) {
-      setStatus('Espera un momento antes de enviar otro mensaje.', 'error');
+    if (typeof window.emailjs === 'undefined') {
+      setStatus('El formulario no está disponible ahora mismo. Escríbeme directamente a maroldandh@gmail.com.', 'error');
       return;
     }
 
-    if (!validateForm({ sanitize: true })) {
-      setStatus('Revisa los campos del formulario antes de enviarlo.', 'error');
-      return;
-    }
+    if (sending || Date.now() - lastSentAt < EMAIL_CONFIG.minSubmitDelayMs) return;
 
-    setStatus('', '');
-    setSubmitState(true);
+    sending = true;
+    button.setAttribute('aria-busy', 'true');
+    button.textContent = 'Enviando…';
+    setStatus('');
 
     try {
-      await emailjs.sendForm(emailConfig.serviceId, emailConfig.templateId, form, {
-        publicKey: emailConfig.publicKey
+      await window.emailjs.sendForm(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, form, {
+        publicKey: EMAIL_CONFIG.publicKey
       });
-      lastSubmittedAt = Date.now();
+      lastSentAt = Date.now();
       form.reset();
-      setStatus('Tu mensaje se ha enviado correctamente. Responderé lo antes posible.', 'success');
+      setStatus('Mensaje enviado. Te responderé lo antes posible.', 'success');
     } catch (error) {
-      console.error('EmailJS error:', {
-        status: error?.status,
-        text: error?.text,
-        message: error?.message
-      });
-      setStatus(getEmailErrorMessage(error), 'error');
+      console.error('EmailJS:', { status: error?.status, text: error?.text });
+      setStatus(errorMessageFor(error), 'error');
     } finally {
-      setSubmitState(false);
+      sending = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = 'Enviar mensaje';
     }
   });
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  initSidebar();
-  initProjectFilters();
-  initNavigation();
+  initThemeToggle();
+  initFilters();
+  initActiveNav();
   initContactForm();
 });
